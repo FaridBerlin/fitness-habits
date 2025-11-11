@@ -10,3 +10,5 @@ export async function connectDB() {
     process.exit(1);
   }
 }
+
+// Call connectDB() when this module is imported
