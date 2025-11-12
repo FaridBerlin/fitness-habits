@@ -1,19 +1,27 @@
-# View logs
-docker compose logs -f
 
-# Check container status
+
+
+
+
+
+
+
+
+# Start containers (detached/background mode)Start everything 🚀
+
+docker compose up -d
+
+# Stop and remove containers Stop everything 🛑
+docker compose down
+
+# Check status Check status 📊
 docker compose ps
 
-# Stop containers
-docker compose down
+# View logs
+docker compose logs -f
 
 # Restart containers
 docker compose restart
 
-# Check specific service logs
-docker compose logs backend
-docker compose logs frontend
-docker compose logs mongodb
-
-# Rebuild if needed
+# Rebuild after code changes
 docker compose up --build
