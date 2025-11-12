@@ -1,14 +1,13 @@
 import mongoose from "mongoose";
-import { config } from "./config.js";
+
+const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017/Fitness-11-DB";
 
 export async function connectDB() {
   try {
-    await mongoose.connect(config.mongoUri);
-    console.log("✅ MongoDB connected");
+    await mongoose.connect(MONGO_URI);
+    console.log("✅ MongoDB connected to:", mongoose.connection.db.databaseName);
   } catch (err) {
     console.error("❌ DB connection failed:", err.message);
     process.exit(1);
   }
 }
-
-// Call connectDB() when this module is imported

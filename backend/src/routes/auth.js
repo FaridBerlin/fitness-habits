@@ -1,9 +1,9 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
-import { config } from '../config.js';
 
 const router = express.Router();
+const JWT_SECRET = process.env.JWT_SECRET || 'change_me_in_production';
 
 router.post('/signup', async (req, res) => {
   try {
@@ -20,7 +20,7 @@ router.post('/signup', async (req, res) => {
     const user = new User({ email, password, name, timezone: timezone || 'UTC' });
     await user.save();
 
-    const token = jwt.sign({ userId: user._id }, config.jwtSecret, { expiresIn: '7d' });
+    const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '7d' });
     res.status(201).json({ token, user: { id: user._id, email, name } });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -39,7 +39,7 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    const token = jwt.sign({ userId: user._id }, config.jwtSecret, { expiresIn: '7d' });
+    const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '7d' });
     res.json({ token, user: { id: user._id, email: user.email, name: user.name } });
   } catch (err) {
     res.status(500).json({ error: err.message });
