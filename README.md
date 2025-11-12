@@ -23,7 +23,7 @@ A full-stack web application for tracking daily habits and building healthy rout
 
 ### Backend
 
-- **Node.js** - Runtime environment
+- **Node.js 22** - Runtime environment
 - **Express.js** - Web framework
 - **MongoDB** - NoSQL database
 - **Mongoose** - ODM for MongoDB
@@ -118,7 +118,7 @@ fitness-habits/
 
 ### Prerequisites
 
-- **Node.js** (v16 or higher)
+- **Node.js** (v22 or higher)
 - **MongoDB** (local installation or MongoDB Atlas)
 - **npm** or **yarn**
 
@@ -194,7 +194,46 @@ npm run dev
 
 Frontend will run on `http://localhost:3000`
 
-## 📡 API Endpoints
+## � Docker Setup (Recommended)
+
+For the easiest setup, use Docker and Docker Compose:
+
+### Prerequisites
+
+- **Docker Desktop** installed and running
+- **Docker Compose** (included with Docker Desktop)
+
+### Quick Start with Docker
+
+```bash
+# Clone repository
+git clone https://github.com/FaridBerlin/fitness-habits.git
+cd fitness-habits
+
+# Start all services
+docker-compose up -d
+
+# Access the application
+# Frontend: http://localhost:3000
+# Backend API: http://localhost:5000
+```
+
+### Docker Commands
+
+```bash
+# View logs
+docker-compose logs -f
+
+# Stop services
+docker-compose down
+
+# Rebuild after code changes
+docker-compose up --build
+```
+
+For detailed Docker instructions, see [`docs/DOCKER.md`](docs/DOCKER.md).
+
+## �📡 API Endpoints
 
 ### Authentication
 

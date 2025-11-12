@@ -1,0 +1,85 @@
+version: "3.8"
+
+services:
+  # MongoDB Database
+  mongodb:
+    image: mongo:7-jammy
+    container_name: fitness-tracker-mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_DATABASE: Fitness-11-DB
+    volumes:
+      - mongodb_data:/data/db
+    ports:
+      - "27018:27017" # Changed from 27017 to 27018 to avoid conflict
+    networks:
+      - fitness-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+  # Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: fitness-tracker-backend
+    restart: unless-stopped
+    environment:
+      MONGO_URI: mongodb://mongodb:27017/Fitness-11-DB # Still connects to container's internal port 27017
+      PORT: 5000
+      JWT_SECRET: your_super_secret_jwt_key_change_this_in_production
+      NODE_ENV: production
+    ports:
+      - "5000:5000"
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - fitness-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Frontend React App
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: fitness-tracker-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - fitness-network
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://localhost/",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+volumes:
+  mongodb_data:
+    driver: local
+
+networks:
+  fitness-network:
+    driver: bridge
