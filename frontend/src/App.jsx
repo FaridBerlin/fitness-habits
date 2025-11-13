@@ -3,7 +3,11 @@ import './styles.css'
 import LoginPage from './components/LoginPage'
 import Dashboard from './components/Dashboard'
 
-const API_URL = 'http://localhost:5000'
+// Backend URL - use production URL or fallback to localhost for local development
+const API_URL = import.meta.env.VITE_BACKEND_URL || 
+                (window.location.hostname === 'localhost' 
+                  ? 'http://localhost:5000' 
+                  : 'https://fitness-habits-backend.onrender.com')
 
 function App() {
   const [currentToken, setCurrentToken] = useState(localStorage.getItem('token'))
